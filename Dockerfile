@@ -5,7 +5,13 @@ RUN apt-get update --fix-missing && apt-get install -y build-essential \
     libssl-dev \
     libxrender-dev \
     wget \
-    gdebi
+    gdebi \
+    libldap2-dev \
+    zip \
+    unzip \
+    vim \
+    curl \
+    php7.0-gd
 
 WORKDIR /var/www/html
 
@@ -15,15 +21,7 @@ RUN wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_li
 
 
 # Installation des dépendances
-RUN \
-    apt-get update --fix-missing && \
-    apt-get install libldap2-dev -y && \
-    apt-get install zip -y && \
-    apt-get install unzip -y && \
-    apt-get install vim -y && \
-    apt-get install curl -y && \
-    apt-get install wget -y && \
-    docker-php-ext-install pdo && \
+RUN docker-php-ext-install pdo && \
     docker-php-ext-install pdo_mysql
 
 # Active le module de réécriture d'apache
@@ -39,10 +37,6 @@ RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php
     && mv composer.phar /usr/local/bin/composer \
     && chmod 755 /usr/local/bin/composer
 
-# Installation de l'extension PHP GD
-RUN \
-    apt-get update --fix-missing && apt-get install -y \
-        php7.0-gd
 
 # Suppression des fichiers temporaires.
 RUN apt-get clean \
