@@ -6,3 +6,5 @@ RUN apt-get update && apt-get install -y build-essential \
     libxrender-dev \
     wget \
     gdebi
+
+WORKDIR /var/www/html
