@@ -1,4 +1,4 @@
-FROM php:7.0.8-apache
+FROM php:7.0-apache
 
 # WKHTML2PDF
 RUN apt-get install -y \
