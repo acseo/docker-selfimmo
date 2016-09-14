@@ -1,5 +1,6 @@
 FROM php:7.0-apache
 
+# change miror
 RUN apt-get update --fix-missing && apt-get install -y \
     build-essential \
     libssl-dev \
