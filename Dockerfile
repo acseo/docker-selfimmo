@@ -1,9 +1,7 @@
 FROM php:7.0.8-apache
 
 # WKHTML2PDF
-RUN apt-get clean
 RUN apt-get update && \
-    apt-get upgrade -y && \
     apt-get install -y \
     build-essential \
     libssl-dev \
