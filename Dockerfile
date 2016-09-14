@@ -1,7 +1,7 @@
 FROM php:7.0-apache
 
 # WKHTML2PDF
-RUN apt-get update --fix-missing && apt-get install -y build-essential \ 
+RUN apt-get update --fix-missing && apt-get install -y build-essential \
     libssl-dev \
     libxrender-dev \
     wget \
@@ -42,13 +42,7 @@ RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php
 # Installation de l'extension PHP GD
 RUN \
     apt-get update --fix-missing && apt-get install -y \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libmcrypt-dev \
-        libpng12-dev && \
-    docker-php-ext-install -j$(nproc) iconv mcrypt && \
-    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
-    docker-php-ext-install -j$(nproc) gd exif
+        php7.0-gd
 
 # Suppression des fichiers temporaires.
 RUN apt-get clean \
