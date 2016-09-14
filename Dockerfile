@@ -1,10 +1,7 @@
 FROM php:7.0-apache
 
-# WKHTML2PDF
-RUN echo "deb http://packages.dotdeb.org jessie all" > /etc/apt/sources.list.d/dotdeb.list
-RUN apt-get update --fix-missing && apt-get install -y wget
-RUN wget -O- https://www.dotdeb.org/dotdeb.gpg | apt-key add -
-RUN apt-get update --fix-missing && apt-get install -y build-essential \
+RUN apt-get update --fix-missing && apt-get install -y \
+    build-essential \
     libssl-dev \
     libxrender-dev \
     gdebi \
@@ -13,18 +10,22 @@ RUN apt-get update --fix-missing && apt-get install -y build-essential \
     unzip \
     vim \
     curl \
-    php7.0-gd
+    wget \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libmcrypt-dev \
+    libpng12-dev
 
-WORKDIR /var/www/html
+RUN \
+    docker-php-ext-install -j$(nproc) iconv mcrypt && \
+    docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-install -j$(nproc) gd && \
+    docker-php-ext-install pdo && \
+    docker-php-ext-install pdo_mysql
 
 RUN wget http://download.gna.org/wkhtmltopdf/0.12/0.12.2.1/wkhtmltox-0.12.2.1_linux-jessie-amd64.deb && \
     gdebi --n wkhtmltox-0.12.2.1_linux-jessie-amd64.deb && \
     rm wkhtmltox-0.12.2.1_linux-jessie-amd64.deb
-
-
-# Installation des dépendances
-RUN docker-php-ext-install pdo && \
-    docker-php-ext-install pdo_mysql
 
 # Active le module de réécriture d'apache
 RUN \
@@ -39,19 +40,13 @@ RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php
     && mv composer.phar /usr/local/bin/composer \
     && chmod 755 /usr/local/bin/composer
 
-
 # Suppression des fichiers temporaires.
 RUN apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-# Autorisations sur les répertoires caches et log.
-RUN \
-    mkdir -p /var/www/html/app/cache && \
-    mkdir -p /var/www/html/app/logs && \
-    chown -R www-data:www-data /var/www/html/app/cache && \
-    chown -R www-data:www-data /var/www/html/app/logs
 
 # Autorisations sur le répertoire composer
 RUN \
     mkdir -p /var/www/.composer && \
     chown -R www-data:www-data /var/www/.composer
+
+WORKDIR /var/www/html
