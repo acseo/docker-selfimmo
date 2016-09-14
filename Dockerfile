@@ -1,10 +1,12 @@
 FROM php:7.0-apache
 
 # WKHTML2PDF
+RUN echo "deb http://packages.dotdeb.org jessie all" > /etc/apt/sources.list.d/dotdeb.list
+RUN apt-get update --fix-missing && apt-get install -y wget
+RUN wget -O- https://www.dotdeb.org/dotdeb.gpg | apt-key add -
 RUN apt-get update --fix-missing && apt-get install -y build-essential \
     libssl-dev \
     libxrender-dev \
-    wget \
     gdebi \
     libldap2-dev \
     zip \
