@@ -125,7 +125,7 @@ RUN \
 
 COPY apache2-foreground /usr/local/bin/
 EXPOSE 80
-ENTRYPOINT ["apache2-foreground"]
+CMD ["apache2-foreground"]
 
 ################################################################################
 # Configuration de wkhtmltopdf
