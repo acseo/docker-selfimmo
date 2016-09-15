@@ -79,6 +79,7 @@ RUN \
         unzip \
         vim \
         curl \
+        xvfb \
         wkhtmltopdf
 
 WORKDIR /var/www/html
