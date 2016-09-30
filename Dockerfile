@@ -57,7 +57,8 @@ RUN \
     a2dismod mpm_event && \
     a2enmod mpm_prefork && \
     a2enmod php7.0 && \
-    a2enmod rewrite
+    a2enmod rewrite && \
+    a2enmod headers
 
 # logs should go to stdout / stderr
 RUN \
